@@ -1,0 +1,63 @@
+﻿@page "/one"
+
+@using Web.Features
+@inherits Web.Features.Base.Components.BaseComponent
+
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <h1 class="h1">Day 01</h1>
+        </div>
+    </div>
+    <hr/>
+    @if (State.DayOneResult != 0)
+    {
+        var successMessage = _choosenPart == 1 ? 
+            $"The two entries that sum to 2020 multiply to {State.DayOneResult}" :
+            $"The three entries that sum to 2020 multiply to {State.DayOneResult}";
+        <SuccessAlert Message=@successMessage></SuccessAlert>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-4">
+                <InputFile OnChange="OnFileChange"></InputFile>
+            </div>
+        </div>
+        <hr/>
+        @if (File != null)
+        {
+            <div class="row">
+                <div class="col-4">
+                    <button class="btn btn-dark" @onclick="CalculateExpensesPart1">
+                        Upload expense report (Part 1)
+                    </button>
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-dark" @onclick="CalculateExpensesPart2">
+                        Upload expense report (Part 2)
+                    </button>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    private IBrowserFile File { get; set; }
+
+    private void OnFileChange(InputFileChangeEventArgs eventArgs) => File = eventArgs.File;
+    private int _choosenPart;
+
+    private async Task CalculateExpensesPart1()
+    {
+        _choosenPart = 1;
+        await Send(new ApplicationState.SumExpensesPart1Action(File));
+    }
+
+    private async Task CalculateExpensesPart2()
+    {
+        _choosenPart = 2;
+        await Send(new ApplicationState.SumExpensesPart2Action(File));
+    }
+}

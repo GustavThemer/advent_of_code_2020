@@ -3,8 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using BlazorState;
 using MediatR;
-using Web.Features._01;
 using Web.Features.Base;
+using Web.Infrastructure;
 
 // ReSharper disable once CheckNamespace
 namespace Web.Features

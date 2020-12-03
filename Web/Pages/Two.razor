@@ -1,0 +1,62 @@
+﻿@page "/two"
+
+@using Web.Features
+@inherits Web.Features.Base.Components.BaseComponent
+
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <h1 class="h1">Day 02</h1>
+            </div>
+        </div>
+        <hr />
+        @if (State.DayTwoResult != 0)
+        {
+            var successMessage = _choosenPart == 1 ? 
+                $"Number of valid passwords for part 1 is {State.DayTwoResult}" :
+                $"Number of valid passwords for part 2 is {State.DayTwoResult}";
+            <SuccessAlert Message=@successMessage></SuccessAlert>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-4">
+                    <InputFile OnChange="OnFileChange"></InputFile>
+                </div>
+            </div>
+            <hr/>
+            @if (File != null)
+            {
+                <div class="row">
+                    <div class="col-4">
+                        <button class="btn btn-dark" @onclick="ValidatePasswordsPart1">
+                            Validate passwords (Part 1)
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button class="btn btn-dark" @onclick="ValidatePasswordsPart2">
+                            Validate passwords (Part 2)
+                        </button>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+@code {
+    private IBrowserFile File { get; set; }
+
+    private void OnFileChange(InputFileChangeEventArgs eventArgs) => File = eventArgs.File;
+    private int _choosenPart;
+
+    private async Task ValidatePasswordsPart1()
+    {
+        _choosenPart = 1;
+        await Send(new ApplicationState.PasswordCorruptedPart1Action(File));
+    }
+
+    private async Task ValidatePasswordsPart2()
+    {
+        _choosenPart = 1;
+        await Send(new ApplicationState.PasswordCorruptedPart2Action(File));
+    }
+}
